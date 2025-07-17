@@ -10,6 +10,7 @@ from schemas.factorial_schema import FactorialRequest
 from schemas.fib_schema import FibRequest
 from schemas.pow_schema import PowRequest
 from schemas.result_schema import ResultResponse
+from utils.response_wraper import api_response
 
 router = APIRouter()
 
@@ -28,7 +29,7 @@ def pow_op(
         session=session,
         request=request,
     )
-    return {"result": result}
+    return api_response({"result": result})
 
 
 @router.post("/nFib", response_model=ResultResponse)
@@ -45,7 +46,7 @@ def nFib_op(
         session=session,
         request=request,
     )
-    return {"result": result}
+    return api_response({"result": result})
 
 
 @router.post("/factorial", response_model=ResultResponse)
@@ -62,10 +63,10 @@ def factorial_op(
         session=session,
         request=request,
     )
-    return {"result": result}
+    return api_response({"result": result})
 
 
 @router.get("/logs/all")
 def get_all_logs(session: Session = Depends(get_session)):
     logs = session.query(RequestLog).all()
-    return [log.dict() for log in logs]
+    return api_response([log.dict() for log in logs], message="Logs fetched")
