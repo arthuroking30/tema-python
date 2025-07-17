@@ -6,12 +6,10 @@ from controller.controllerLog import log_request
 from controller.controllernFib import nFib_operation
 from controller.controllerFactorial import factorial_operation
 from models.RequestLog import RequestLog
-from models.schemas import (
-    PowRequest,
-    FibRequest,
-    FactorialRequest,
-    ResultResponse,
-)
+from schemas.factorial_schema import FactorialRequest
+from schemas.fib_schema import FibRequest
+from schemas.pow_schema import PowRequest
+from schemas.result_schema import ResultResponse
 
 router = APIRouter()
 
