@@ -1,6 +1,6 @@
 from models.User import User
 from sqlmodel import Session, select
-from schemas.user_create_schema import UserCreateRequest
+from schemas.user_schema import UserCreateRequest
 from utils.jwt_utils import create_access_token
 from sqlalchemy.exc import IntegrityError
 import hashlib

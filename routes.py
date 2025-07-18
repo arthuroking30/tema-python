@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, Body
 from sqlmodel import Session
 from db import get_session
 from controller.controllerPow import pow_operation
@@ -11,7 +11,7 @@ from schemas.factorial_schema import FactorialRequest
 from schemas.fib_schema import FibRequest
 from schemas.pow_schema import PowRequest
 from schemas.result_schema import ResultResponse
-from schemas.user_create_schema import UserCreateRequest
+from schemas.user_schema import UserCreateRequest, UserLoginRequest
 from utils.response_wraper import api_response
 
 
@@ -86,12 +86,12 @@ def get_logs(
 @router.post("/user/create")
 def create_user_op(
     session: Session = Depends(get_session),
-    req: UserCreateRequest = Depends(),
-    request: Request = None,
+    req: UserCreateRequest = Body(...),
 ):
     user = create_user(req, session)
+    token = login_user(req, session)
     return api_response(
-        {"username": user.username, "email": user.email},
+        {"username": user.username, "email": user.email, "token": token},
         message="User created",
     )
 
@@ -99,8 +99,7 @@ def create_user_op(
 @router.post("/user/login")
 def log_in_user(
     session: Session = Depends(get_session),
-    req: UserCreateRequest = Depends(),
-    request: Request = None,
+    req: UserLoginRequest = Body(...),
 ):
     token = login_user(req, session)
     return api_response({"token": token}, message="Login successful")

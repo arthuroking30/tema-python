@@ -3,6 +3,7 @@ from sqlmodel import SQLModel
 from db import engine
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException
+from fastapi.exceptions import RequestValidationError
 from utils.integrity_error_handler import global_error_handler
 import routes
 from contextlib import asynccontextmanager
@@ -18,6 +19,7 @@ async def lifespan(app):
 app = FastAPI(lifespan=lifespan)
 app.add_exception_handler(IntegrityError, global_error_handler)
 app.add_exception_handler(HTTPException, global_error_handler)
+app.add_exception_handler(RequestValidationError, global_error_handler)
 app.include_router(routes.router)
 
 
