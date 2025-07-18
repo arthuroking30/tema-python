@@ -2,30 +2,25 @@ from fastapi import APIRouter, Depends, Request
 from sqlmodel import Session
 from db import get_session
 from controller.controllerPow import pow_operation
-from controller.controllerLog import log_request
+from controller.controllerLog import log_request, get_all_logs
 from controller.controllernFib import nFib_operation
 from controller.controllerFactorial import factorial_operation
-from models.RequestLog import RequestLog
+from controller.controllerUser import create_user, get_all_users
 from schemas.factorial_schema import FactorialRequest
 from schemas.fib_schema import FibRequest
 from schemas.pow_schema import PowRequest
 from schemas.result_schema import ResultResponse
+from schemas.user_create_schema import UserCreateRequest
 from utils.response_wraper import api_response
 
 
 # Main router for all endpoints
-router = APIRouter()
-
-# API v1 router with prefix
-api_v1_router = APIRouter(prefix="/api/v1")
-
-# Include all routes in api_v1_router
-api_v1_router.include_router(router)
+router = APIRouter(prefix="/api/v1")
 
 
 @router.get("/pow", response_model=ResultResponse)
 def pow_op(
-    req: PowRequest,
+    req: PowRequest = Depends(),
     session: Session = Depends(get_session),
     request: Request = None,
 ):
@@ -42,7 +37,7 @@ def pow_op(
 
 @router.get("/nFib", response_model=ResultResponse)
 def nFib_op(
-    req: FibRequest,
+    req: FibRequest = Depends(),
     session: Session = Depends(get_session),
     request: Request = None,
 ):
@@ -59,7 +54,7 @@ def nFib_op(
 
 @router.get("/factorial", response_model=ResultResponse)
 def factorial_op(
-    req: FactorialRequest,
+    req: FactorialRequest = Depends(),
     session: Session = Depends(get_session),
     request: Request = None,
 ):
@@ -75,6 +70,36 @@ def factorial_op(
 
 
 @router.get("/logs/all")
-def get_all_logs(session: Session = Depends(get_session)):
-    logs = session.query(RequestLog).all()
+def get_logs(session: Session = Depends(get_session)):
+    logs = get_all_logs(session)
     return api_response([log.dict() for log in logs], message="Logs fetched")
+
+
+@router.post("/user/create")
+def create_user_op(
+    session: Session = Depends(get_session),
+    req: UserCreateRequest = Depends(),
+    request: Request = None,
+):
+    user = create_user(req, session)
+    return api_response(
+        {"username": user.username, "email": user.email},
+        message="User created",
+    )
+
+
+@router.post("/user/login")
+def log_in_user(
+    session: Session = Depends(get_session),
+    req: UserCreateRequest = Depends(),
+    request: Request = None,
+):
+    pass
+
+
+@router.get("/users")
+def get_users(session: Session = Depends(get_session)):
+    users = get_all_users(session)
+    return api_response(
+        [user.model_dump() for user in users], message="users fetched"
+    )

@@ -1,5 +1,5 @@
 from fastapi import Request
-from sqlmodel import Session
+from sqlmodel import Session, select
 from models.RequestLog import RequestLog
 
 
@@ -30,3 +30,7 @@ def log_request(
         )
     )
     session.commit()
+
+
+def get_all_logs(session: Session):
+    return list(session.exec(select(RequestLog)))
