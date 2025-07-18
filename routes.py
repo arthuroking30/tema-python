@@ -12,10 +12,18 @@ from schemas.pow_schema import PowRequest
 from schemas.result_schema import ResultResponse
 from utils.response_wraper import api_response
 
+
+# Main router for all endpoints
 router = APIRouter()
 
+# API v1 router with prefix
+api_v1_router = APIRouter(prefix="/api/v1")
 
-@router.post("/pow", response_model=ResultResponse)
+# Include all routes in api_v1_router
+api_v1_router.include_router(router)
+
+
+@router.get("/pow", response_model=ResultResponse)
 def pow_op(
     req: PowRequest,
     session: Session = Depends(get_session),
@@ -32,7 +40,7 @@ def pow_op(
     return api_response({"result": result})
 
 
-@router.post("/nFib", response_model=ResultResponse)
+@router.get("/nFib", response_model=ResultResponse)
 def nFib_op(
     req: FibRequest,
     session: Session = Depends(get_session),
@@ -49,7 +57,7 @@ def nFib_op(
     return api_response({"result": result})
 
 
-@router.post("/factorial", response_model=ResultResponse)
+@router.get("/factorial", response_model=ResultResponse)
 def factorial_op(
     req: FactorialRequest,
     session: Session = Depends(get_session),
