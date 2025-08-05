@@ -5,7 +5,7 @@ A FastAPI-based web service providing math functions with JWT authentication, us
 ## Features
 
 - **User Registration & Login**: Secure user creation and login with password hashing and JWT token issuance.
-- **JWT Authentication**: All math and log endpoints are protected; only authenticated users can access them.
+- **JWT Bearer Token Authentication**: All math and log endpoints are protected; only authenticated users can access them.
 - **Math Endpoints**:
   - `GET /api/v1/pow`: Power calculation (`base`, `exp`)
   - `GET /api/v1/nFib`: Nth Fibonacci number (`n`)
@@ -20,7 +20,7 @@ A FastAPI-based web service providing math functions with JWT authentication, us
 1. **Clone the repository**:
    ```sh
    git clone <your-repo-url>
-   cd tema python 2
+   cd tema-python
    ```
 
 2. **Create a virtual environment (optional but recommended)**:
@@ -40,7 +40,7 @@ A FastAPI-based web service providing math functions with JWT authentication, us
    ```
 
 5. **Access the API**:
-   - Root: [http://localhost:8000/](http://localhost:8000/)
+   - Root: [http://localhost:8000/api/v1](http://localhost:8000/)
    - Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
 
 ## Usage
@@ -88,11 +88,11 @@ curl -H "Authorization: Bearer <your_token>" "http://localhost:8000/api/v1/facto
 
 ### 5. View Logs
 
-`GET /api/v1/logs/all` (JWT required)
+`GET /api/v1/logs/all`
 
 ### 6. List Users
 
-`GET /api/v1/users` (JWT required)
+`GET /api/v1/users`
 
 ---
 
