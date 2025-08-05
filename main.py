@@ -20,6 +20,16 @@ app = FastAPI(lifespan=lifespan)
 app.add_exception_handler(IntegrityError, global_error_handler)
 app.add_exception_handler(HTTPException, global_error_handler)
 app.add_exception_handler(RequestValidationError, global_error_handler)
+
+
+@app.get("/")
+def root():
+    return {
+        "message": "See the API documentation at /docs",
+        "docs_url": "/docs",
+    }
+
+
 app.include_router(routes.router)
 
 
